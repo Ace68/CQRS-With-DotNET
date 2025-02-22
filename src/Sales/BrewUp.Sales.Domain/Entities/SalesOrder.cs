@@ -17,6 +17,8 @@ public class SalesOrder : AggregateRoot
 	internal CustomerName _customerName;
 
 	internal IEnumerable<SalesOrderRow> _rows;
+	
+	internal DeliveryDate _deliveryDate;
 
 	protected SalesOrder()
 	{
@@ -44,5 +46,29 @@ public class SalesOrder : AggregateRoot
 		_customerId = @event.CustomerId;
 		_customerName = @event.CustomerName;
 		_rows = @event.Rows.MapToDomainRows();
+
+		_deliveryDate = new DeliveryDate(DateTime.MaxValue);
+	}
+	
+	internal void SetDeliveryDate(DeliveryDate deliveryDate, Guid correlationId)
+	{
+		if (deliveryDate.Value < _orderDate.Value)
+		{
+			RaiseEvent(new SalesOrderDomainException(new SalesOrderId(new Guid(Id.Value)), correlationId,
+				new Exception("Delivery date cannot be earlier than order date.")));
+			return;
+		}
+		
+		RaiseEvent(new SalesOrderDeliveryDateSet(new SalesOrderId(new Guid(Id.Value)), correlationId, deliveryDate));
+	}
+	
+	private void Apply(SalesOrderDeliveryDateSet @event)
+	{
+		//_deliveryDate = @event.DeliveryDate;
+	}
+	
+	private void Apply(SalesOrderDomainException @event)
+	{
+		// do nothing
 	}
 }
