@@ -27,7 +27,7 @@ public static class SalesHelper
 		services.AddScoped<IQueries<SalesOrder>, SalesOrderQueries>();
 		services.AddScoped<IQueries<Availability>, AvailabilityQueries>();
 
-		//services.AddSalesDomain();
+		services.AddSalesDomain();
 
 		return services;
 	}

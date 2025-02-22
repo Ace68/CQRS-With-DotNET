@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\BrewUp.Infrastructure\BrewUp.Infrastructure.csproj" />
     <ProjectReference Include="..\..\BrewUp.Shared\BrewUp.Shared.csproj" />
+    <ProjectReference Include="..\..\BrewUp.Warehouses.Acl\BrewUp.Warehouses.Acl.csproj" />
     <ProjectReference Include="..\BrewUp.Warehouses.Domain\BrewUp.Warehouses.Domain.csproj" />
   </ItemGroup>
 

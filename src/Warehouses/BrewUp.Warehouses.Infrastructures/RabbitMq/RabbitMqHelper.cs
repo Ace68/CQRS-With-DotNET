@@ -36,6 +36,9 @@ public static class RabbitMqHelper
 				loggerFactory),
 			new AvailabilityUpdatedDueToProductionOrderConsumer(serviceProvider.GetRequiredService<IAvailabilityService>(),
 				serviceProvider.GetRequiredService<IEventBus>(),
+				mufloneConnectionFactory, loggerFactory),
+			
+			new SalesOrderCreatedConsumer(serviceProvider.GetRequiredService<ISalesOrderService>(),
 				mufloneConnectionFactory, loggerFactory)
 		});
 		services.AddMufloneRabbitMQConsumers(consumers);

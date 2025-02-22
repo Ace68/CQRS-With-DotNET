@@ -23,6 +23,7 @@ public static class WarehousesHelper
 		services.AddScoped<IWarehousesFacade, WarehousesFacade>();
 		services.AddScoped<IAvailabilityService, AvailabilityService>();
 		services.AddScoped<IQueries<Availability>, AvailabilityQueries>();
+		services.AddScoped<ISalesOrderService, SalesOrderService>();
 
 		return services;
 	}
