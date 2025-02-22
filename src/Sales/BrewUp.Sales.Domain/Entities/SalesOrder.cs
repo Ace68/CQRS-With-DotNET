@@ -19,6 +19,7 @@ public class SalesOrder : AggregateRoot
 	internal IEnumerable<SalesOrderRow> _rows;
 	
 	internal DeliveryDate _deliveryDate;
+	// internal OrderState _orderState;
 
 	protected SalesOrder()
 	{
@@ -36,6 +37,7 @@ public class SalesOrder : AggregateRoot
 		CustomerId customerId, CustomerName customerName, IEnumerable<SalesOrderRowDto> rows)
 	{		
 		RaiseEvent(new SalesOrderCreated(salesOrderId, correlationId, salesOrderNumber, orderDate, customerId, customerName, rows));
+		//RaiseEvent(new SalesOrderCreatedV2(salesOrderId, correlationId, salesOrderNumber, orderDate, customerId, customerName, new OrderState("Open"), rows));
 	}
 
 	private void Apply(SalesOrderCreated @event)
@@ -46,9 +48,29 @@ public class SalesOrder : AggregateRoot
 		_customerId = @event.CustomerId;
 		_customerName = @event.CustomerName;
 		_rows = @event.Rows.MapToDomainRows();
-
+	
 		_deliveryDate = new DeliveryDate(DateTime.MaxValue);
 	}
+	
+	// private void Apply(SalesOrderCreated @event)
+	// {
+	// 	SalesOrderCreatedV2 upgradeEvent = new(@event.SalesOrderId, @event.MessageId, @event.SalesOrderNumber,
+	// 		@event.OrderDate, @event.CustomerId, @event.CustomerName, new OrderState("Open"), @event.Rows);
+	// 	Apply(upgradeEvent);
+	// }
+	
+	// private void Apply(SalesOrderCreatedV2 @event)
+	// {
+	// 	Id = @event.SalesOrderId;
+	// 	_salesOrderNumber = @event.SalesOrderNumber;
+	// 	_orderDate = @event.OrderDate;
+	// 	_customerId = @event.CustomerId;
+	// 	_customerName = @event.CustomerName;
+	// 	_rows = @event.Rows.MapToDomainRows();
+	//
+	// 	_deliveryDate = new DeliveryDate(DateTime.MaxValue);
+	// 	_orderState = @event.OrderState;
+	// }
 	
 	internal void SetDeliveryDate(DeliveryDate deliveryDate, Guid correlationId)
 	{
