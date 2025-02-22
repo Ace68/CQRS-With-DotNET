@@ -38,6 +38,8 @@ public static class RabbitMqHelper
 			new SalesOrderCreatedConsumer(serviceProvider.GetRequiredService<ISalesOrderService>(),
 				serviceProvider.GetRequiredService<IEventBus>(),
 				mufloneConnectionFactory, loggerFactory),
+			
+			new SetSalesOrderDeliveryDateConsumer(repository, mufloneConnectionFactory, loggerFactory),
 
 			new AvailabilityUpdatedForNotificationConsumer(serviceProvider.GetRequiredService<IServiceBus>(),
 				mufloneConnectionFactory,

@@ -18,6 +18,11 @@ public static class SalesEndpoints
 			.Produces(StatusCodes.Status400BadRequest)
 			.Produces(StatusCodes.Status201Created)
 			.WithName("CreateSalesOrder");
+		
+		group.MapPut("/{salesOrderId}", HandleSetDeliveryDate)
+			.Produces(StatusCodes.Status400BadRequest)
+			.Produces(StatusCodes.Status201Created)
+			.WithName("SetDeliveryDate");
 
 		group.MapGet("/", HandleGetOrders)
 			.Produces(StatusCodes.Status400BadRequest)
@@ -27,7 +32,7 @@ public static class SalesEndpoints
 		return endpoints;
 	}
 
-	public static async Task<IResult> HandleCreateOrder(
+	private static async Task<IResult> HandleCreateOrder(
 		ISalesFacade salesUpFacade,
 		IValidator<SalesOrderJson> validator,
 		ValidationHandler validationHandler,
@@ -42,8 +47,23 @@ public static class SalesEndpoints
 
 		return Results.Created(new Uri($"/v1/sales/{salesOrderId}", UriKind.Relative), salesOrderId);
 	}
+	
+	private static async Task<IResult> HandleSetDeliveryDate(
+		ISalesFacade salesUpFacade,
+		IValidator<SalesOrderJson> validator,
+		ValidationHandler validationHandler,
+		string salesOrderId,
+		CancellationToken cancellationToken)
+	{
+		if (string.IsNullOrWhiteSpace(salesOrderId))
+			return Results.BadRequest(validationHandler.Errors);
+		
+		await salesUpFacade.SetDeliveryDateAsync(salesOrderId, cancellationToken);
 
-	public static async Task<IResult> HandleGetOrders(
+		return Results.NoContent();
+	}
+
+	private static async Task<IResult> HandleGetOrders(
 		ISalesFacade salesUpFacade,
 		CancellationToken cancellationToken)
 	{

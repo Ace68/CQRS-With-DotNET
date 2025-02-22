@@ -25,6 +25,14 @@ public sealed class SalesFacade(IServiceBus serviceBus,
 
 		return body.SalesOrderId;
 	}
+	
+	public async Task SetDeliveryDateAsync(string salesOrderId, CancellationToken cancellationToken)
+	{
+		SetSalesOrderDeliveryDate command = new(new SalesOrderId(new Guid(salesOrderId)), Guid.NewGuid(),
+			new DeliveryDate(DateTime.Now.AddDays(20)));
+
+		await serviceBus.SendAsync(command, cancellationToken);
+	}
 
 	public async Task<PagedResult<SalesOrderJson>> GetOrdersAsync(CancellationToken cancellationToken)
 	{
