@@ -13,4 +13,5 @@ public interface ISalesOrderService
 
 	Task<PagedResult<SalesOrderJson>> GetSalesOrdersAsync(int page, int pageSize, CancellationToken cancellationToken);
 	Task CompleteSalesOrderAsync(SalesOrderId eventSalesOrderId, CancellationToken cancellationToken);
+	Task SetSalesOrderDeliveryDateAsync(SalesOrderId eventSalesOrderId, DeliveryDate eventDeliveryDate, CancellationToken cancellationToken);
 }

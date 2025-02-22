@@ -17,6 +17,8 @@ public class SalesOrder : EntityBase
 	public DateTime OrderDate { get; private set; } = DateTime.MinValue;
 
 	public IEnumerable<SalesOrderRow> Rows { get; private set; } = Enumerable.Empty<SalesOrderRow>();
+	
+	public DateTime DeliveryDate { get; private set; } = DateTime.MaxValue;
 
 	public string Status { get; private set; } = string.Empty;
 
@@ -36,10 +38,13 @@ public class SalesOrder : EntityBase
 		OrderDate = orderDate;
 		Rows = rows;
 
+		DeliveryDate = DateTime.MaxValue;
 		Status = Shared.Helpers.Status.Created.Name;
 	}
 
 	public void CompleteOrder() => Status = Shared.Helpers.Status.Completed.Name;
+	
+	public void SetDeliveryDate(DeliveryDate deliveryDate) => DeliveryDate = deliveryDate.Value;
 
 	public SalesOrderJson ToJson() => new(Id, OrderNumber, Guid.Parse(CustomerId), CustomerName, OrderDate, Rows.Select(r => r.ToJson));
 }

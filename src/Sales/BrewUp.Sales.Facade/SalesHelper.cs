@@ -1,4 +1,5 @@
 ﻿using BrewUp.Infrastructure.RabbitMq;
+using BrewUp.Sales.Domain;
 using BrewUp.Sales.Facade.Validators;
 using BrewUp.Sales.Infrastructures.MongoDb;
 using BrewUp.Sales.Infrastructures.RabbitMq;
@@ -25,6 +26,8 @@ public static class SalesHelper
 		services.AddScoped<IAvailabilityService, AvailabilityService>();
 		services.AddScoped<IQueries<SalesOrder>, SalesOrderQueries>();
 		services.AddScoped<IQueries<Availability>, AvailabilityQueries>();
+
+		//services.AddSalesDomain();
 
 		return services;
 	}

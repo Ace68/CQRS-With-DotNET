@@ -27,6 +27,22 @@ public sealed class SalesOrderService(ILoggerFactory loggerFactory, [FromKeyedSe
 			throw;
 		}
 	}
+	
+	public async Task SetSalesOrderDeliveryDateAsync(SalesOrderId eventSalesOrderId, DeliveryDate deliveryDate,
+		CancellationToken cancellationToken)
+	{
+		try
+		{
+			var salesOrder = await Persister.GetByIdAsync<SalesOrder>(eventSalesOrderId.Value, cancellationToken);
+			salesOrder.SetDeliveryDate(deliveryDate);
+			await Persister.UpdateAsync(salesOrder, cancellationToken);
+		}
+		catch (Exception ex)
+		{
+			Logger.LogError(ex, "Error creating sales order");
+			throw;
+		}
+	}
 
 	public async Task<PagedResult<SalesOrderJson>> GetSalesOrdersAsync(int page, int pageSize, CancellationToken cancellationToken)
 	{

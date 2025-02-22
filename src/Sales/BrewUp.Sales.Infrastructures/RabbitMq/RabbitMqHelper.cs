@@ -40,11 +40,12 @@ public static class RabbitMqHelper
 				mufloneConnectionFactory, loggerFactory),
 			
 			new SetSalesOrderDeliveryDateConsumer(repository, mufloneConnectionFactory, loggerFactory),
+			new SalesOrderDeliveryDateSetConsumer(mufloneConnectionFactory, serviceProvider.GetRequiredService<ISalesOrderService>(), loggerFactory),
 
 			new AvailabilityUpdatedForNotificationConsumer(serviceProvider.GetRequiredService<IServiceBus>(),
 				mufloneConnectionFactory,
 				loggerFactory),
-
+			
 			new UpdateAvailabilityDueToWarehousesNotificationConsumer(repository, mufloneConnectionFactory,
 				loggerFactory),
 			new AvailabilityUpdatedDueToWarehousesNotificationConsumer(serviceProvider.GetRequiredService<IAvailabilityService>(),

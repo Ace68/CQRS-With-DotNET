@@ -6,11 +6,13 @@ using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;
 using BrewUp.Shared.Entities;
 using BrewUp.Shared.ReadModel;
+using Muflone.Messages.Commands;
 using Muflone.Persistence;
 
 namespace BrewUp.Sales.Facade;
 
 public sealed class SalesFacade(IServiceBus serviceBus,
+	ICommandHandlerAsync<SetSalesOrderDeliveryDate> setSalesOrderDeliveryDateCommandHandler,
 	IQueries<SalesOrder> orderQueries) : ISalesFacade
 {
 	public async Task<string> CreateOrderAsync(SalesOrderJson body, CancellationToken cancellationToken)
@@ -30,6 +32,8 @@ public sealed class SalesFacade(IServiceBus serviceBus,
 	{
 		SetSalesOrderDeliveryDate command = new(new SalesOrderId(new Guid(salesOrderId)), Guid.NewGuid(),
 			new DeliveryDate(DateTime.Now.AddDays(20)));
+		
+		//await setSalesOrderDeliveryDateCommandHandler.HandleAsync(command, cancellationToken);
 
 		await serviceBus.SendAsync(command, cancellationToken);
 	}
