@@ -1,17 +1,14 @@
-﻿using BrewUp.Shared.Contracts;
+﻿using BrewUp.Sales.SharedKernel.CustomTypes;
+using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;
 using Muflone.Messages.Events;
 
 namespace BrewUp.Sales.SharedKernel.Events;
 
-public sealed class SalesOrderCreated(SalesOrderId aggregateId,
-	Guid commitId, 
-	SalesOrderNumber salesOrderNumber,
-	OrderDate orderDate, 
-	CustomerId customerId,
-	CustomerName customerName,
-	IEnumerable<SalesOrderRowJson> rows) : DomainEvent(aggregateId, commitId)
+public sealed class SalesOrderCreated(SalesOrderId aggregateId, Guid commitId, SalesOrderNumber salesOrderNumber,
+	OrderDate orderDate, CustomerId customerId, CustomerName customerName,
+	IEnumerable<SalesOrderRowDto> rows) : DomainEvent(aggregateId, commitId)
 {
 	public readonly SalesOrderId SalesOrderId = aggregateId;
 	public readonly SalesOrderNumber SalesOrderNumber = salesOrderNumber;
@@ -20,5 +17,5 @@ public sealed class SalesOrderCreated(SalesOrderId aggregateId,
 	public readonly CustomerId CustomerId = customerId;
 	public readonly CustomerName CustomerName = customerName;
 
-	public readonly IEnumerable<SalesOrderRowJson> Rows = rows;
+	public readonly IEnumerable<SalesOrderRowDto> Rows = rows;
 }

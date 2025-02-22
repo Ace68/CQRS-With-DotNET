@@ -1,8 +1,6 @@
 ﻿using BrewUp.Infrastructure;
 using BrewUp.Infrastructure.MongoDb;
 using BrewUp.Infrastructure.RabbitMq;
-using BrewUp.Payments.Facade;
-using BrewUp.Saga.Infrastructure.RabbitMq;
 using BrewUp.Sales.Facade;
 using BrewUp.Warehouses.Facade;
 
@@ -13,24 +11,19 @@ public class InfrastructureModule : IModule
 	public bool IsEnabled => true;
 	public int Order => 90;
 
-	public IServiceCollection Register(WebApplicationBuilder builder)
+	public IServiceCollection RegisterModule(WebApplicationBuilder builder)
 	{
-		var eventStoreSettings = builder.Configuration.GetSection("BrewUp:EventStore")
-			.Get<EventStoreSettings>()!;
-		
 		builder.Services.AddInfrastructure(builder.Configuration.GetSection("BrewUp:MongoDbSettings").Get<MongoDbSettings>()!,
-			eventStoreSettings);
+			builder.Configuration.GetSection("BrewUp:EventStore").Get<EventStoreSettings>()!);
 
 		var rabbitMqSettings = builder.Configuration.GetSection("BrewUp:RabbitMQ")
 			.Get<RabbitMqSettings>()!;
 
 		builder.Services.AddSalesInfrastructure(rabbitMqSettings);
 		builder.Services.AddWarehousesInfrastructure(rabbitMqSettings);
-		builder.Services.AddPaymentsInfrastructure(rabbitMqSettings);
-		builder.Services.AddRabbitMqForSagaModule(rabbitMqSettings);
 
 		return builder.Services;
 	}
 
-	WebApplication IModule.Configure(WebApplication app) => app;
+	public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints) => endpoints;
 }

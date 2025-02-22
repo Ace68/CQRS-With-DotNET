@@ -1,5 +1,6 @@
 ﻿using BrewUp.Sales.Domain.CommandHandlers;
 using BrewUp.Sales.SharedKernel.Commands;
+using BrewUp.Sales.SharedKernel.CustomTypes;
 using BrewUp.Sales.SharedKernel.Events;
 using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
@@ -22,7 +23,7 @@ public sealed class CreateSalesOrderSuccessfully : CommandSpecification<CreateSa
 	private readonly CustomerId _customerId = new(Guid.NewGuid());
 	private readonly CustomerName _customerName = new("Muflone");
 
-	private readonly IEnumerable<SalesOrderRowJson> _rows = Enumerable.Empty<SalesOrderRowJson>();
+	private readonly IEnumerable<SalesOrderRowDto> _rows = Enumerable.Empty<SalesOrderRowDto>();
 
 	protected override IEnumerable<DomainEvent> Given()
 	{

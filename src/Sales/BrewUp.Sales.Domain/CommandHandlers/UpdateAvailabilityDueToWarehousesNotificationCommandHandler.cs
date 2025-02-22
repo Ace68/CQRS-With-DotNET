@@ -14,21 +14,19 @@ public sealed class UpdateAvailabilityDueToWarehousesNotificationCommandHandler(
 	public override async Task HandleAsync(UpdateAvailabilityDueToWarehousesNotification command,
 		CancellationToken cancellationToken = default)
 	{
-		cancellationToken.ThrowIfCancellationRequested();
-		
 		try
 		{
 			var aggregate = await Repository.GetByIdAsync<Availability>(command.BeerId, cancellationToken);
-			aggregate!.UpdateAvailability(command.Quantity, command.MessageId);
+			aggregate.UpdateAvailability(command.Quantity, command.MessageId);
 
-			await Repository.SaveAsync(aggregate, Guid.NewGuid());
+			await Repository.SaveAsync(aggregate, Guid.NewGuid(), cancellationToken);
 		}
 		catch
 		{
 			// I'm lazy ... I should check the exception type
 			var aggregate = Availability.CreateAvailability(command.BeerId, command.BeerName, command.Quantity, command.MessageId);
 
-			await Repository.SaveAsync(aggregate, Guid.NewGuid(), cancellationToken);
+			await Repository.SaveAsync(aggregate, Guid.NewGuid());
 		}
 	}
 }

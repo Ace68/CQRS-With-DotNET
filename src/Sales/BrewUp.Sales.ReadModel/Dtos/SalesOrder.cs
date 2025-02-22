@@ -1,4 +1,5 @@
 ﻿using BrewUp.Sales.ReadModel.Helpers;
+using BrewUp.Sales.SharedKernel.CustomTypes;
 using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;
@@ -6,7 +7,7 @@ using BrewUp.Shared.Entities;
 
 namespace BrewUp.Sales.ReadModel.Dtos;
 
-public class SalesOrder : DtoBase
+public class SalesOrder : EntityBase
 {
 	public string OrderNumber { get; private set; } = string.Empty;
 
@@ -23,7 +24,7 @@ public class SalesOrder : DtoBase
 	{ }
 
 	public static SalesOrder CreateSalesOrder(SalesOrderId salesOrderId, SalesOrderNumber salesOrderNumber, CustomerId customerId,
-		CustomerName customerName, OrderDate orderDate, IEnumerable<SalesOrderRowJson> rows) => new(salesOrderId.Value.ToString(),
+		CustomerName customerName, OrderDate orderDate, IEnumerable<SalesOrderRowDto> rows) => new(salesOrderId.Value.ToString(),
 		salesOrderNumber.Value, customerId.Value.ToString(), customerName.Value, orderDate.Value, rows.ToReadModelEntities());
 
 	private SalesOrder(string salesOrderId, string salesOrderNumber, string customerId, string customerName, DateTime orderDate, IEnumerable<SalesOrderRow> rows)

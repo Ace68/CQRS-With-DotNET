@@ -1,4 +1,5 @@
 ﻿using BrewUp.Sales.Domain.Helpers;
+using BrewUp.Sales.SharedKernel.CustomTypes;
 using BrewUp.Sales.SharedKernel.Events;
 using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
@@ -16,24 +17,22 @@ public class SalesOrder : AggregateRoot
 	internal CustomerName _customerName;
 
 	internal IEnumerable<SalesOrderRow> _rows;
-	
-	internal string _status;
-	
+
 	protected SalesOrder()
 	{
 	}
 
 	internal static SalesOrder CreateSalesOrder(SalesOrderId salesOrderId, Guid correlationId, SalesOrderNumber salesOrderNumber,
-		OrderDate orderDate, CustomerId customerId, CustomerName customerName, IEnumerable<SalesOrderRowJson> rows)
+		OrderDate orderDate, CustomerId customerId, CustomerName customerName, IEnumerable<SalesOrderRowDto> rows)
 	{
-		return new SalesOrder(salesOrderId, correlationId, salesOrderNumber, orderDate, customerId, customerName,
-			rows);
+		// Check SalesOrder invariants
+
+		return new SalesOrder(salesOrderId, correlationId, salesOrderNumber, orderDate, customerId, customerName, rows);
 	}
 
 	private SalesOrder(SalesOrderId salesOrderId, Guid correlationId, SalesOrderNumber salesOrderNumber, OrderDate orderDate,
-		CustomerId customerId, CustomerName customerName, IEnumerable<SalesOrderRowJson> rows)
-	{
-		// Check SalesOrder invariants
+		CustomerId customerId, CustomerName customerName, IEnumerable<SalesOrderRowDto> rows)
+	{		
 		RaiseEvent(new SalesOrderCreated(salesOrderId, correlationId, salesOrderNumber, orderDate, customerId, customerName, rows));
 	}
 
@@ -45,20 +44,5 @@ public class SalesOrder : AggregateRoot
 		_customerId = @event.CustomerId;
 		_customerName = @event.CustomerName;
 		_rows = @event.Rows.MapToDomainRows();
-		
-		_status = "Open";
-	}
-
-	public void CloseSalesOrder(SalesOrderNumber commandSalesOrderNumber, Guid correlatioId)
-	{
-		if (_status != "Open")
-			throw new InvalidOperationException("Sales order is not open");
-		
-		RaiseEvent(new SalesOrderClosed((SalesOrderId)Id, correlatioId));
-	}
-	
-	private void Apply(SalesOrderClosed @event)
-	{
-		_status = "Closed";
 	}
 }

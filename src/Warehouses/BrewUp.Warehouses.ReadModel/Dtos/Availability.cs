@@ -5,7 +5,7 @@ using BrewUp.Shared.Entities;
 
 namespace BrewUp.Warehouses.ReadModel.Dtos;
 
-public class Availability : DtoBase
+public class Availability : EntityBase
 {
 	public string BeerId { get; private set; } = string.Empty;
 	public string BeerName { get; private set; } = string.Empty;
@@ -19,11 +19,6 @@ public class Availability : DtoBase
 	public static Availability Create(BeerId beerId, BeerName beerName, Quantity quantity)
 	{
 		return new Availability(beerId.Value.ToString(), beerName.Value, quantity);
-	}
-	
-	public void UpdateQuantity(Quantity quantity)
-	{
-		Quantity = quantity;
 	}
 
 	private Availability(string beerId, string beerName, Quantity quantity)

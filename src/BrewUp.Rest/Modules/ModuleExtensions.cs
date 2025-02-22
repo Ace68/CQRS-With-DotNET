@@ -11,18 +11,18 @@ public static class ModuleExtensions
 					 .Where(m => m.IsEnabled)
 					 .OrderBy(m => m.Order))
 		{
-			module.Register(builder);
+			module.RegisterModule(builder);
 			RegisteredModules.Add(module);
 		}
 
 		return builder;
 	}
 
-	public static WebApplication ConfigureModules(this WebApplication app)
+	public static WebApplication MapEndpoints(this WebApplication app)
 	{
 		foreach (var module in RegisteredModules)
 		{
-			module.Configure(app);
+			module.MapEndpoints(app);
 		}
 
 		return app;

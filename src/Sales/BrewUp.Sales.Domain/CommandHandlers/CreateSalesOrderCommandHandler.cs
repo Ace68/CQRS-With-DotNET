@@ -11,8 +11,6 @@ public sealed class CreateSalesOrderCommandHandler(IRepository repository, ILogg
 {
 	public override async Task HandleAsync(CreateSalesOrder command, CancellationToken cancellationToken = default)
 	{
-		cancellationToken.ThrowIfCancellationRequested();
-		
 		var aggregate = SalesOrder.CreateSalesOrder(command.SalesOrderId, command.MessageId, command.SalesOrderNumber,
 			command.OrderDate, command.CustomerId, command.CustomerName, command.Rows);
 		await Repository.SaveAsync(aggregate, Guid.NewGuid(), cancellationToken);

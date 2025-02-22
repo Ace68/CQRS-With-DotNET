@@ -1,17 +1,14 @@
-﻿using BrewUp.Shared.Contracts;
+﻿using BrewUp.Sales.SharedKernel.CustomTypes;
+using BrewUp.Shared.Contracts;
 using BrewUp.Shared.CustomTypes;
 using BrewUp.Shared.DomainIds;
 using Muflone.Messages.Commands;
 
 namespace BrewUp.Sales.SharedKernel.Commands;
 
-public class CreateSalesOrder(SalesOrderId aggregateId, 
-	Guid commitId,
-	SalesOrderNumber salesOrderNumber,
-	OrderDate orderDate,
-	CustomerId customerId,
-	CustomerName customerName,
-	IEnumerable<SalesOrderRowJson> rows)
+public class CreateSalesOrder(SalesOrderId aggregateId, Guid commitId, SalesOrderNumber salesOrderNumber,
+		OrderDate orderDate, CustomerId customerId, CustomerName customerName,
+		IEnumerable<SalesOrderRowDto> rows)
 	: Command(aggregateId, commitId)
 {
 	public readonly SalesOrderId SalesOrderId = aggregateId;
@@ -21,5 +18,5 @@ public class CreateSalesOrder(SalesOrderId aggregateId,
 	public readonly CustomerId CustomerId = customerId;
 	public readonly CustomerName CustomerName = customerName;
 
-	public readonly IEnumerable<SalesOrderRowJson> Rows = rows;
+	public readonly IEnumerable<SalesOrderRowDto> Rows = rows;
 }

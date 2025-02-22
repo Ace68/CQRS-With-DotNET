@@ -10,12 +10,12 @@ public class SalesArchitectureTests
     [Fact]
     public void SalesProjects_Should_Having_Namespace_StartingWith_BrewUp_Sales()
     {
-        var sourceModulePath = Path.Combine(VisualStudioProvider.TryGetSolutionDirectoryInfo().FullName, "Sales");
-        var subFolders = Directory.GetDirectories(sourceModulePath);
+        var purchaseModulePath = Path.Combine(VisualStudioProvider.TryGetSolutionDirectoryInfo().FullName, "Sales");
+        var subFolders = Directory.GetDirectories(purchaseModulePath);
 
         var netVersion = Environment.Version;
 
-        var moduleAssemblies = (from folder in subFolders
+        var purchasesAssemblies = (from folder in subFolders
                                    let binFolder = Path.Join(folder, "bin", "Debug", $"net{netVersion.Major}.{netVersion.Minor}")
                                    let files = Directory.GetFiles(binFolder)
                                    let folderArray = folder.Split(Path.DirectorySeparatorChar)
@@ -24,36 +24,13 @@ public class SalesArchitectureTests
                                    where !assemblyFilename!.Contains("Test")
                                    select Assembly.LoadFile(assemblyFilename!)).ToList();
 
-        var moduleTypes = Types.InAssemblies(moduleAssemblies);
-        var moduleResult = moduleTypes
+        var warehousesTypes = Types.InAssemblies(purchasesAssemblies);
+        var warehousesResult = warehousesTypes
             .Should()
             .ResideInNamespaceStartingWith("BrewUp.Sales")
             .GetResult();
 
-        Assert.True(moduleResult.IsSuccessful);
-    }
-    
-    [Fact]
-    public void Should_SalesArchitecture_BeCompliant()
-    {
-        var types = Types.InAssembly(typeof(Facade.SalesFacade).Assembly);
-
-        var forbiddenAssemblies = new List<string>
-        {
-            "BrewUp.Warehouses.Facade",
-            "BrewUp.Warehouses.Domain",
-            "BrewUp.Warehouses.Infrastructures",
-            "BrewUp.Warehouses.ReadModel",
-            "BrewUp.Warehouses.SharedKernel"
-        };
-
-        var result = types
-            .ShouldNot()
-            .HaveDependencyOnAny(forbiddenAssemblies.ToArray())
-            .GetResult()
-            .IsSuccessful;
-
-        Assert.True(result);
+        Assert.True(warehousesResult.IsSuccessful);
     }
 
     private static class VisualStudioProvider

@@ -9,8 +9,8 @@ using Muflone.Transport.RabbitMQ.Consumers;
 namespace BrewUp.Sales.Infrastructures.RabbitMq.Events;
 
 public sealed class AvailabilityUpdatedForNotificationConsumer(IServiceBus serviceBus,
-	IRabbitMQConnectionFactory connectionFactory, ILoggerFactory loggerFactory)
-	: IntegrationEventsConsumerBase<AvailabilityUpdatedForNotification>(connectionFactory, loggerFactory)
+		IRabbitMQConnectionFactory mufloneConnectionFactory, ILoggerFactory loggerFactory)
+	: IntegrationEventsConsumerBase<AvailabilityUpdatedForNotification>(mufloneConnectionFactory, loggerFactory)
 {
 	protected override IEnumerable<IIntegrationEventHandlerAsync<AvailabilityUpdatedForNotification>> HandlersAsync { get; } = new List<IIntegrationEventHandlerAsync<AvailabilityUpdatedForNotification>>
 	{

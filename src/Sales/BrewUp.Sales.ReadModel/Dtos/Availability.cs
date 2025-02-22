@@ -5,7 +5,7 @@ using BrewUp.Shared.Entities;
 
 namespace BrewUp.Sales.ReadModel.Dtos;
 
-public class Availability : DtoBase
+public class Availability : EntityBase
 {
 	public string BeerId { get; private set; } = string.Empty;
 	public string BeerName { get; private set; } = string.Empty;
